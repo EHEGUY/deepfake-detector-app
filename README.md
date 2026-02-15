@@ -32,11 +32,10 @@ The model was evaluated over 5 training epochs, demonstrating high precision in 
 | **Fake Detection Confidence** | **99.94%** | Average certainty when identifying forgeries. |
 | **Inference Latency** | **~45ms** | Real-time processing speed per image frame. |
 
-
-Metric,Visual Meaning,What it proves to your friend
-Precision,"The ""Accuser"" Accuracy","When the model says ""Fake,"" it is almost always correct. It doesn't accuse real people."
-Recall,"The ""Detective"" Skill",The model is great at finding every single fake in the room. Nothing slips through.
-F1-Score,The Balance,A single number that proves both Precision and Recall are high.
+### Advanced Architectural Features
+* **Singleton Model Loader:** Optimized memory management by ensuring the ResNet18 weights are initialized only once.
+* **Integrity Check:** Zero-leakage data pipeline with strict physical separation of Training and Validation sets.
+* **System Health Monitoring:** Dedicated `/health` endpoint for real-time API status verification.
 
 ### Performance Visualization
 
