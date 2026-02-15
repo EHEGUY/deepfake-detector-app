@@ -1,5 +1,22 @@
+# Environments & Cache
 venv/
 __pycache__/
-node_modules/
+.env
+
+# Large Data & Media
 dataset/
+data/
+*.jpg
+*.png
+*.mp4
 *.pth
+
+# EXCEPTIONS: Do NOT ignore these specific result images
+!backend/images/results.png
+!backend/images/confusion_matrix.png
+
+# Frontend junk
+node_modules/
+.next/
+dist/
+.DS_Store
