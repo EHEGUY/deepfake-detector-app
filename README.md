@@ -33,10 +33,11 @@ The model was evaluated over 5 training epochs, demonstrating high precision in 
 | **Inference Latency** | **~45ms** | Real-time processing speed per image frame. |
 
 
-Metric	Score	Why it matters
-Precision	~0.95	High certainty that a "Fake" flag is actually a fake.
-Recall	~0.98	Ensuring almost zero deepfakes "slip through" the system.
-F1-Score	~0.96	The harmonic mean of both; shows a perfectly balanced model.
+Metric,Visual Meaning,What it proves to your friend
+Precision,"The ""Accuser"" Accuracy","When the model says ""Fake,"" it is almost always correct. It doesn't accuse real people."
+Recall,"The ""Detective"" Skill",The model is great at finding every single fake in the room. Nothing slips through.
+F1-Score,The Balance,A single number that proves both Precision and Recall are high.
+
 ### Performance Visualization
 
 
