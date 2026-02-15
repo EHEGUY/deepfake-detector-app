@@ -66,6 +66,12 @@ To prevent **Data Leakage** (where the model "cheats" by memorizing test data), 
 * **Security Hardening:** Utilizes `weights_only=True` during the `torch.load` process to adhere to modern security standards.
 * **Container Ready:** The inclusion of a `/health` endpoint makes this project ready for professional deployment via Docker or Kubernetes.
 
+###  Inference & Decision Logic
+
+The system utilizes a **Softmax Activation Layer** to transform raw logit outputs from the ResNet18 head into human-readable probabilities.
+
+- **Calculation:** Confidence is derived using $Confidence = \max(\sigma(z))$, where $\sigma$ is the Softmax function.
+- **Thresholding:** While the model provides a binary "Real/Fake" label, the confidence score provides a forensic layer of detail, allowing users to identify "Borderline" cases (e.g., scores between 50% and 70%).
 ### Performance Visualization
 
 

@@ -1,24 +1,24 @@
 import torch
+import os
+import io
 from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
 from torchvision import models, transforms
 from PIL import Image
-import io
 
-app = FastAPI()
-from fastapi.middleware.cors import CORSMiddleware
-
+# Initialize App once
 app = FastAPI()
 
-
+# 1. THE BRIDGE (CORS) - Fixed: No duplicates, allows Frontend connection
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows my React app to talk to Python they coudnt beacuse they were munni 
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# --- STEP 1: THE SINGLETON LOADER ---
+# 2. THE SINGLETON LOADER - Efficient Memory Management
 class DeepfakeModel:
     _instance = None
     _model = None
@@ -26,13 +26,16 @@ class DeepfakeModel:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(DeepfakeModel, cls).__new__(cls)
-            # Defining architecture (ResNet18)
+            # Define Architecture
             cls._model = models.resnet18()
             num_ftrs = cls._model.fc.in_features
             cls._model.fc = torch.nn.Linear(num_ftrs, 2)
             
-            # Load your weights
-            cls._model.load_state_dict(torch.load("trained_deepfake_detector.pth", map_location=torch.device('cpu')))
+            # Load Weights
+            BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+            MODEL_PATH = os.path.join(BASE_DIR, "trained_deepfake_detector.pth")
+            
+            cls._model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu'), weights_only=True))
             cls._model.eval()
             print("🚀 Model loaded into memory successfully (Singleton).")
         return cls._instance
@@ -41,43 +44,44 @@ class DeepfakeModel:
     def model(self):
         return self._model
 
-# Initialize the singleton instance
 model_loader = DeepfakeModel()
 
-# --- STEP 2: THE HEALTH CHECK ENDPOINT ---
+# 3. THE HEALTH CHECK
 @app.get("/health")
 async def health_check():
-    """
-    Standard health check for production monitoring.
-    """
     return {
         "status": "healthy",
         "model_loaded": model_loader.model is not None,
-        "device": "cpu", #  will ssChange to 'cuda' if using GPU
+        "device": "cpu",
         "architecture": "ResNet18"
     }
 
-# --- STEP 3:  PREDICTION ROUTE ---
+# 4. PREDICTION ROUTE - Fixed: Now calculates real Confidence Score
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
-    # Load image from the Singleton
     model = model_loader.model
-    
-    # Preprocessing
     image_bytes = await file.read()
     img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
     
-    #  transformation logic here
     preprocess = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
     
     input_tensor = preprocess(img).unsqueeze(0)
     
     with torch.no_grad():
         output = model(input_tensor)
-        prediction = torch.argmax(output, dim=1).item()
+        # STEP 4.1: Calculate Probability using Softmax
+        probabilities = torch.nn.functional.softmax(output, dim=1)
+        confidence, prediction = torch.max(probabilities, dim=1)
     
-    label = "Fake" if prediction == 1 else "Real"
-    return {"result": label}
+    # STEP 4.2: Convert to percentage (0.98 -> 98.0)
+    score = confidence.item() * 100
+    label = "Fake" if prediction.item() == 1 else "Real"
+    
+    return {
+        "result": label,
+        "confidence": score  # Sends the real score to the frontend!
+    }
