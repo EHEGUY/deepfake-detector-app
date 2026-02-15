@@ -44,7 +44,12 @@ To satisfy production-grade requirements, we look beyond simple accuracy. These 
 | **Recall** | **98.2%** | $\frac{TP}{TP + FN}$ | **The "Security" Guard:** High recall ensures that the system is highly sensitive to artifacts. It "catches" nearly 99% of all forgeries, ensuring that synthetic media rarely "slips through" undetected. |
 | **F1-Score** | **96.9%** | $2 \cdot \frac{P \cdot R}{P + R}$ | **The Reliability Index:** Since deepfake detection requires a balance between security (Recall) and user trust (Precision), the F1-Score proves this model is optimized for both. |
 
-
+### Experimental Integrity (Anti-Leakage Measures)
+To prevent **Data Leakage** (where the model "cheats" by memorizing test data), we implemented a strict **Subject-Independent Split**:
+* **Training Set:** 80% of data used to teach the model ResNet18 features.
+* **Validation Set:** 10% used for hyperparameter tuning.
+* **Test Set:** 10% completely "unseen" images used for final evaluation.
+* **No Subject Overlap:** We ensured that images of the same person do not appear in both training and testing sets, forcing the model to learn *artifacts*, not *faces*.
 ---
 
 
