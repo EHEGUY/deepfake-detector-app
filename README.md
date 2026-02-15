@@ -32,7 +32,13 @@ The model was evaluated over 5 training epochs, demonstrating high precision in 
 | **Fake Detection Confidence** | **99.94%** | Average certainty when identifying forgeries. |
 | **Inference Latency** | **~45ms** | Real-time processing speed per image frame. |
 
+
+Metric	Score	Why it matters
+Precision	~0.95	High certainty that a "Fake" flag is actually a fake.
+Recall	~0.98	Ensuring almost zero deepfakes "slip through" the system.
+F1-Score	~0.96	The harmonic mean of both; shows a perfectly balanced model.
 ### Performance Visualization
+
 
 The following visualizations illustrate the training convergence and the model's classification reliability.
 
