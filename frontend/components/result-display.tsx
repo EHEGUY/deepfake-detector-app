@@ -80,8 +80,7 @@ export default function ResultDisplay({ prediction, imageUrl, onReset }: ResultD
             <div className="flex items-center justify-between">
               <p className="text-xs text-white/50 uppercase tracking-widest font-semibold">Confidence Score</p>
               <p className={`text-3xl font-bold ${resultColor}`}>
-                {displayConfidence.toFixed(1)}%
-              </p>
+              {(displayConfidence ?? 0).toFixed(1)}%              </p>
             </div>
 
             {/* Animated Progress Bar */}
