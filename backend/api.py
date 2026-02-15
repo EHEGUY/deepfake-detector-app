@@ -1,58 +1,71 @@
-from fastapi import FastAPI, UploadFile, File
-from fastapi.middleware.cors import CORSMiddleware
 import torch
-from torchvision import transforms, models
+from fastapi import FastAPI, UploadFile, File
+from torchvision import models, transforms
 from PIL import Image
 import io
 
 app = FastAPI()
 
-# This is CRITICAL. It allows a v0 website to talk to this local Python server.
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], 
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# --- STEP 1: THE SINGLETON LOADER ---
+class DeepfakeModel:
+    _instance = None
+    _model = None
 
-# 1. Load the Model into memory when the server starts
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Loading AI Brain onto: {device}...")
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(DeepfakeModel, cls).__new__(cls)
+            # Defining architecture (ResNet18)
+            cls._model = models.resnet18()
+            num_ftrs = cls._model.fc.in_features
+            cls._model.fc = torch.nn.Linear(num_ftrs, 2)
+            
+            # Load your weights
+            cls._model.load_state_dict(torch.load("trained_deepfake_detector.pth", map_location=torch.device('cpu')))
+            cls._model.eval()
+            print("🚀 Model loaded into memory successfully (Singleton).")
+        return cls._instance
 
-model = models.resnet18(weights=None)
-model.fc = torch.nn.Linear(model.fc.in_features, 2)
-model.load_state_dict(torch.load('trained_deepfake_detector.pth', map_location=device, weights_only=True))
-model = model.to(device)
-model.eval()
+    @property
+    def model(self):
+        return self._model
 
-transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor()
-])
+# Initialize the singleton instance
+model_loader = DeepfakeModel()
 
-classes = ['Fake', 'Real']
+# --- STEP 2: THE HEALTH CHECK ENDPOINT ---
+@app.get("/health")
+async def health_check():
+    """
+    Standard health check for production monitoring.
+    """
+    return {
+        "status": "healthy",
+        "model_loaded": model_loader.model is not None,
+        "device": "cpu", #  will ssChange to 'cuda' if using GPU
+        "architecture": "ResNet18"
+    }
 
-# 2. Define the Endpoint (The "Waiter")
+# --- STEP 3:  PREDICTION ROUTE ---
 @app.post("/predict")
-async def predict_image(file: UploadFile = File(...)):
-    # Read the uploaded image file
-    image_bytes = await file.read()
-    image = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+async def predict(file: UploadFile = File(...)):
+    # Load image from the Singleton
+    model = model_loader.model
     
-    # Process it through the AI
-    input_tensor = transform(image).unsqueeze(0).to(device)
+    # Preprocessing
+    image_bytes = await file.read()
+    img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+    
+    #  transformation logic here
+    preprocess = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+    ])
+    
+    input_tensor = preprocess(img).unsqueeze(0)
     
     with torch.no_grad():
         output = model(input_tensor)
-        probabilities = torch.nn.functional.softmax(output, dim=1)[0]
-        _, predicted = torch.max(output, 1)
-        
-    result = classes[predicted.item()]
-    confidence = probabilities[predicted.item()].item() * 100
+        prediction = torch.argmax(output, dim=1).item()
     
-    # Send the data back as a clean JSON package
-    return {
-        "prediction": result,
-        "confidence": round(confidence, 2)
-    }
+    label = "Fake" if prediction == 1 else "Real"
+    return {"result": label}
