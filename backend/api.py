@@ -5,6 +5,18 @@ from PIL import Image
 import io
 
 app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows my React app to talk to Python they coudnt beacuse they were munni 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- STEP 1: THE SINGLETON LOADER ---
 class DeepfakeModel:
