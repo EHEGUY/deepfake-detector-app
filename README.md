@@ -1,4 +1,4 @@
-# Deepfake Detection System
+# Deepfake Detection System, Détecteur 
 **A Production-Ready Full-Stack AI Forensics Platform**
 
 This repository contains a full-stack application designed to detect AI-generated and synthetic facial forgeries. By utilizing a Deep Residual Network (ResNet18), the system identifies subtle facial artifacts and frequency inconsistencies typically invisible to the human eye.
