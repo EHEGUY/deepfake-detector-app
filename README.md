@@ -32,10 +32,7 @@ The model was evaluated over 5 training epochs, demonstrating high precision in 
 | **Fake Detection Confidence** | **99.94%** | Average certainty when identifying forgeries. |
 | **Inference Latency** | **~45ms** | Real-time processing speed per image frame. |
 
-### Advanced Architectural Features
-* **Singleton Model Loader:** Optimized memory management by ensuring the ResNet18 weights are initialized only once.
-* **Integrity Check:** Zero-leakage data pipeline with strict physical separation of Training and Validation sets.
-* **System Health Monitoring:** Dedicated `/health` endpoint for real-time API status verification.
+
 
 ### Performance Visualization
 
