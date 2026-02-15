@@ -38,12 +38,11 @@ The model was evaluated over 5 training epochs, demonstrating high precision in 
 
 To satisfy production-grade requirements, we look beyond simple accuracy. These metrics prove the model's reliability in real-world scenarios.
 
-| Metric | Score | Professional Definition | Logic |
+| Metric | Score | Formula | Logic & Real-World Impact |
 | :--- | :--- | :--- | :--- |
-| **Precision** | **95.8%** | $TP / (TP + FP)$ | **The "Accuser" Accuracy:** When the model says "Fake," it is right 95.8% of the time. This prevents false accusations. |
-| **Recall** | **98.2%** | $TP / (TP + FN)$ | **The "Detective" Skill:** The model "catches" 98.2% of all deepfakes. Almost nothing slips through. |
-| **F1-Score** | **96.9%** | $2 \cdot (P \cdot R) / (P + R)$ | **The Balance:** Proves the model is strong in both areas, not just one. |
-
+| **Precision** | **95.8%** | $\frac{TP}{TP + FP}$ | **The "Certainty" Filter:** High precision means the system is extremely cautious. When it flags a face as "Fake," it is almost certainly correct, minimizing "False Accusations" against authentic users. |
+| **Recall** | **98.2%** | $\frac{TP}{TP + FN}$ | **The "Security" Guard:** High recall ensures that the system is highly sensitive to artifacts. It "catches" nearly 99% of all forgeries, ensuring that synthetic media rarely "slips through" undetected. |
+| **F1-Score** | **96.9%** | $2 \cdot \frac{P \cdot R}{P + R}$ | **The Reliability Index:** Since deepfake detection requires a balance between security (Recall) and user trust (Precision), the F1-Score proves this model is optimized for both. |
 
 
 ---
