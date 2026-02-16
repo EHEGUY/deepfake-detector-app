@@ -1,13 +1,13 @@
 import torch
 from torchvision import transforms, models
 from PIL import Image
-
-# 1. Setup the device (GPU if available)
+# (GPU if available)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
-# 2. Load the ResNet18 architecture
-# We set weights=None because we don't want the generic PyTorch brain, we want yours!
+# 2. Loadas the ResNet18 architecture
+# We set weights=None because we don't want the generic PyTorch brain, we want your custom-trained brain
+
 model = models.resnet18(weights=None)
 model.fc = torch.nn.Linear(model.fc.in_features, 2)
 
@@ -25,17 +25,14 @@ transform = transforms.Compose([
     transforms.ToTensor()
 ])
 
-# ==========================================
-# 5. CHANGE THIS PATH TO YOUR TEST IMAGE
-# ==========================================
-# Notice the 'r' before the string. This makes it a "raw string" so Windows backslashes work perfectly!
+
 image_path = r"C:\Users\siddt\OneDrive\Desktop\deepfake\dataset\test\fake\fake_5.jpg"
 try:
     # Open the image and convert it to the format the model expects
     image = Image.open(image_path).convert('RGB')
     input_tensor = transform(image).unsqueeze(0).to(device)
 
-    # 6. Make the Prediction!
+    # 6. Makse the Predictio 
     with torch.no_grad():
         output = model(input_tensor)
         probabilities = torch.nn.functional.softmax(output, dim=1)[0]

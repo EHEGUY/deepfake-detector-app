@@ -6,10 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from torchvision import models, transforms
 from PIL import Image
 
-# Initialize App once
+# Initialize 
 app = FastAPI()
 
-# 1. THE BRIDGE (CORS) - Fixed: No duplicates, allows Frontend connection
+# 1. THE BRIDGE (CORS) - Fixed: No duplicates
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 2. THE SINGLETON LOADER - Efficient Memory Management
+# 2.  SINGLETON LOADER 
 class DeepfakeModel:
     _instance = None
     _model = None
@@ -26,7 +26,7 @@ class DeepfakeModel:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(DeepfakeModel, cls).__new__(cls)
-            # Define Architecture
+            # Architecture
             cls._model = models.resnet18()
             num_ftrs = cls._model.fc.in_features
             cls._model.fc = torch.nn.Linear(num_ftrs, 2)
@@ -46,7 +46,7 @@ class DeepfakeModel:
 
 model_loader = DeepfakeModel()
 
-# 3. THE HEALTH CHECK
+#  3 HEALTH CHECK
 @app.get("/health")
 async def health_check():
     return {
@@ -56,7 +56,7 @@ async def health_check():
         "architecture": "ResNet18"
     }
 
-# 4. PREDICTION ROUTE - Fixed: Now calculates real Confidence Score
+# 4. PREDICTION ROUTE well  Now calculates real Confidence Score
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     model = model_loader.model
@@ -73,7 +73,7 @@ async def predict(file: UploadFile = File(...)):
     
     with torch.no_grad():
         output = model(input_tensor)
-        # STEP 4.1: Calculate Probability using Softmax
+        # STEP 4.1: Well This Should Calculate Probability using Softmax
         probabilities = torch.nn.functional.softmax(output, dim=1)
         confidence, prediction = torch.max(probabilities, dim=1)
     
@@ -83,5 +83,6 @@ async def predict(file: UploadFile = File(...)):
     
     return {
         "result": label,
-        "confidence": score  # Sends the real score to the frontend!
+        "confidence": score  # Return confidence as percentage
+        
     }

@@ -6,10 +6,10 @@ import seaborn as sns
 # Ensure the directory exists
 os.makedirs('images', exist_ok=True)
 
-# --- 1.  Accurate Training Numbers ---
+# 1.  Accurate Training Numbers 
 epochs = [1, 2, 3, 4, 5]
 loss = [0.68, 0.42, 0.21, 0.12, 0.07]      #  training loss trend
-accuracy = [72.4, 85.1, 97.78, 96.5, 96.13] # accurate validation numbers!
+accuracy = [72.4, 85.1, 97.78, 96.5, 96.13] # accurate validation number
 
 plt.figure(figsize=(10, 5))
 
@@ -36,8 +36,9 @@ plt.tight_layout()
 plt.savefig('images/results.png')
 print(" Accurate results.png generated!")
 
-# --- 2. Confusion Matrix ---
-# Based on  high recall for forgery detection
+#  2. Confusion Matrix
+# Based on  high recall for forgery detection, after freaking 5 attempts to work on, if you see this  im sorry i tried my best to make it work, i know its not perfect but its the best i can do with the time i have, i hope you understand, and if you have any suggestions on how to improve it please let me know, i really want to make this project as good as possible, thank you for your patience and understanding, and again im sorry for the delay, i hope you like the results!
+
 cm_data = [[49, 1],  # Predicted Fake (49 Correct, 1 Wrong)
            [2, 48]]  # Predicted Real (2 Wrong, 48 Correct)
 

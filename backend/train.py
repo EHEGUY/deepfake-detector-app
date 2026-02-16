@@ -4,18 +4,18 @@ from torchvision import datasets, transforms, models
 from torch.utils.data import DataLoader
 from tqdm import tqdm  
 
-# 1. Set device
+# 1 Set device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print("Using device:", device)
 
-# 2. Define paths
+# 2 Define paths
 train_dir = './dataset/train'
 val_dir = './dataset/validation'
 test_dir = './dataset/test'
 
-# ==========================================
-# 3. DEFINE TRANSFORMS (The Augmentation Upgrade)
-# ==========================================
+
+# 3 DEFINE TRANSFORMS (The Augmentation Upgrade)
+
 
 # A. Training Transform (Hard Practice)
 # Randomly flips, rotates, and changes lighting so the model doesn't memorizes.
@@ -28,7 +28,6 @@ train_transform = transforms.Compose([
 ])
 
 # B. Validation & Test Transform (The Real Match)
-# Clean and standard. No tricks here, just what the model will see in the real world.
 val_test_transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor()
@@ -57,7 +56,7 @@ epochs = 5
 
 print("Starting training with Data Augmentation...")
 for epoch in range(epochs):
-    # --- TRAINING PHASE ---
+    # TRAINING PHASE
     model.train()
     running_loss = 0.0
     
@@ -77,7 +76,7 @@ for epoch in range(epochs):
         
     avg_train_loss = running_loss / len(train_loader)
 
-    # --- VALIDATION PHASE ---
+    # VALIDATION PHASE 
     model.eval()
     val_correct = 0
     val_total = 0
@@ -99,6 +98,7 @@ for epoch in range(epochs):
 
 print("Training finished!")
 
-# 8. Save the model
+#saves the model weights (not the entire model, just the learned parameters)
+
 torch.save(model.state_dict(), 'trained_deepfake_detector.pth')
 print("--- MODEL SAVED SUCCESSFULLY ---")
