@@ -12,8 +12,8 @@ data/
 *.pth
 
 # EXCEPTIONS: Do NOT ignore these specific result images
-!backend/images/results.png
-!backend/images/confusion_matrix.png
+!backend/images/results_v2_forensic.png
+!backend/images/confusion_matrix_v2_forensic.png
 
 # Frontend junk
 node_modules/
