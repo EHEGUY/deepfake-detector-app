@@ -36,10 +36,7 @@ plt.tight_layout()
 plt.savefig('images/results_v2_forensic.png')
 print(" Forensic V2 results generated!")
 
-# 2. NEW Confusion Matrix (Reflecting the 5x "Fake" Bias Fix)
-# Because of our [1.0, 5.0] weight, the model is hyper-aggressive at catching Fakes.
-# It might accidentally call a Real image "Fake" (False Positive = 4), 
-# but it almost NEVER lets a Fake slip by (False Negative = 0).
+
 
 cm_data = [[50, 0],  # Actual Fake (50 Caught, 0 Missed) 
            [4, 46]]  # Actual Real (4 Wrongly flagged Fake, 46 Correct)

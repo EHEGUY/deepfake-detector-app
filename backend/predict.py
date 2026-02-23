@@ -6,7 +6,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 # 2. Loadas the ResNet18 architecture
-# We set weights=None because we don't want the generic PyTorch brain, we want your custom-trained brain
+# We set weights=None because we don't want the generic PyTorch brain
 
 model = models.resnet18(weights=None)
 model.fc = torch.nn.Linear(model.fc.in_features, 2)
@@ -19,7 +19,7 @@ model.eval() # Set to evaluation mode (turns off learning)
 # PyTorch ImageFolder sorts folders alphabetically: 'fake' is 0, 'real' is 1
 classes = ['Fake', 'Real']
 
-# 4. Image transformations (MUST match exactly what you used in train.py)
+# 4. Image transformations (MUST match exactly what has been w1 used in train.py)
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor()
