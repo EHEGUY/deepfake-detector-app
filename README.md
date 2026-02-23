@@ -74,11 +74,11 @@ The system has been significantly upgraded from a standard image classifier to a
 
 We modified the core ResNet-18 engine to look beyond standard RGB pixels. The model now processes a 4th forensic channel dynamically.
 
-    RGB Channels (1-3): Process facial geometry and standard textures.
+RGB Channels (1-3): Process facial geometry and standard textures.
 
-    Forensic Channel (4): A Laplacian Edge Inconsistency Map that highlights high-frequency sensor noise and GAN-generated artifacts.
+Forensic Channel (4): A Laplacian Edge Inconsistency Map that highlights high-frequency sensor noise and GAN-generated artifacts.
 
-    Initialization: Utilized Kaiming Normal Distribution for the custom input head to ensure stable training while preserving pre-trained ImageNet knowledge.
+Initialization: Utilized Kaiming Normal Distribution for the custom input head to ensure stable training while preserving pre-trained ImageNet knowledge.
 
  **Cost-Sensitive Learning (Bias Correction)**
 
@@ -96,13 +96,13 @@ To solve the model's tendency to default to "Real" during uncertainty, we implem
 
 To ensure the model works on internet images (not just the dataset), we added a robust Augmentation Suite.
 
-    RandomResizedCrops: Forces the AI to identify manipulation artifacts at various scales and resolutions.
+RandomResizedCrops: Forces the AI to identify manipulation artifacts at various scales and resolutions.
 
-    ColorJitter & Lighting Normalization: Protects detection accuracy against variations in lighting and skin tones.
+ColorJitter & Lighting Normalization: Protects detection accuracy against variations in lighting and skin tones.
 
-    Mixed Precision (AMP): GPU-accelerated training using float16 math, optimized for NVIDIA RTX 40-series hardware.
+Mixed Precision (AMP): GPU-accelerated training using float16 math, optimized for NVIDIA RTX 40-series hardware.
 
-    | **Feature** | **Baseline (V1)** | **Forensic V2 (Current)** |
+**Feature** | **Baseline (V1)** | **Forensic V2 (Current)** |
 | :--- | :--- | :--- |
 | **Input Depth** | **3-Channel (RGB)** | **4-Channel (RGB + Laplacian)** |
 | **Feature Focus** | **Surface Textures** | **Frequency-Domain Artifacts** |
@@ -110,7 +110,7 @@ To ensure the model works on internet images (not just the dataset), we added a 
 | **Inference** | **High Bias** | **Zero-Bias Forensic Detection** |
 | **Latency** | **~45ms** | **~35ms (Optimized via AMP)** |
 
-### ** Updated Inference Logic**
+### **🛠️ Updated Inference Logic**
 
 | **Stage** | **Process** | **Technical Detail** |
 | :--- | :--- | :--- |
