@@ -112,8 +112,8 @@ The following visualizations illustrate the training convergence and the model's
     <th style="text-align:center">Confusion Matrix (Forensic V2)</th>
   </tr>
   <tr>
-    <td><img src="backend/images/results_v2_forensic.png" width="100%"></td>
-    <td><img src="backend/images/confusion_matrix_v2_forensic.png" width="100%"></td>
+    <td><img src="backend./images./results_v2_forensic.png" width="100%"></td>
+    <td><img src="backend./images./confusion_matrix_v2_forensic.png" width="100%"></td>
   </tr>
 </table>
 
