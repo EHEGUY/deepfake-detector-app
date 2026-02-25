@@ -6,7 +6,7 @@ export default function Features() {
     },
     {
       title: 'Highly Accurate',
-      description: 'Trained on millions of images for precision detection.'
+      description: 'Trained on thousands of images for precision detection.'
     },
     {
       title: 'Privacy First',
