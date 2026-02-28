@@ -1,7 +1,10 @@
 # Environments & Cache
+# Environments & Cache
+.venv/
 venv/
+old_venv/
 __pycache__/
-.env
+.env 
 
 # Large Data & Media
 dataset/

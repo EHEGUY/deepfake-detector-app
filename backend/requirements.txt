@@ -1,8 +1,0 @@
-torch
-torchvision
-fastapi
-uvicorn
-pillow
-matplotlib
-seaborn
-python-multipart
